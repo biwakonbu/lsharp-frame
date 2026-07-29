@@ -1,0 +1,12 @@
+---
+description: Canonical L#frame repository policy
+alwaysApply: true
+---
+
+# Canonical policy
+
+Read and follow @AGENTS.md before planning, editing, reviewing, or running commands.
+The closest scoped `AGENTS.md` adds area-specific requirements.
+
+Do not duplicate repository policy in Cursor rules. This rule only connects Cursor to the
+canonical, tool-neutral instruction hierarchy.

@@ -73,26 +73,42 @@ HTML、CSS、DOM は中核にしません。L# が L#frame 固有の型付き UI
 ## Quick start
 
 ```bash
-cargo fmt --check
-cargo clippy --workspace --all-targets -- -D warnings
-cargo test --workspace
-cargo run -p lsharp-frame-headless
+make doctor
+make harness
+make ci
+make run-headless
 ```
 
 `lsharp-frame-headless` は OS window を作らず、同じ EventBatch → Kernel → UiTransaction 経路を実行します。UI backend に依存しない contract test、replay test、benchmark の正本として使います。
 
+## Development harness
+
+Codex を主要な実装エージェントとし、Claude Code と Cursor も同じ正本を参照します。
+リポジトリ全体の規則は [`AGENTS.md`](AGENTS.md)、領域別の規則は各ディレクトリの
+`AGENTS.md` に置き、ツール固有設定にはアーキテクチャ規則を複製しません。
+
+```bash
+make help
+make context
+make new-task SLUG=example-cross-cutting-change
+```
+
+- [Agent harness](docs/development/agent-harness.md)
+- [Definition of done](docs/development/definition-of-done.md)
+- [Contributing](CONTRIBUTING.md)
+
 ## Workspace layout
 
 ```text
-crates/lsharp-frame-contract       crate非依存の公開意味モデル
-crates/lsharp-frame-spi            Native backend向けPorts
-crates/lsharp-frame-core           Kernel実行・権限検査・UI transaction適用
+crates/lsharp-frame-contract         crate非依存の公開意味モデル
+crates/lsharp-frame-spi              Native backend向けPorts
+crates/lsharp-frame-core             Kernel実行・権限検査・UI transaction適用
 crates/lsharp-frame-adapter-headless 決定的なテスト用Desktop Adapter
-apps/lsharp-frame-headless         最小のcomposition root
-wit/                               L# Component向けWIT契約
-kernel/                            L#frame Kernel skeleton
-plugins/                           L# plugin examples
-docs/                              Architecture / ADR / roadmap
+apps/lsharp-frame-headless           最小のcomposition root
+wit/                                 L# Component向けWIT契約
+kernel/                              L#frame Kernel skeleton
+plugins/                             L# plugin examples
+docs/                                Architecture / ADR / roadmap
 ```
 
 ## Non-goals

@@ -1,27 +1,48 @@
-# Contributing
+# Contributing to L#frame
 
-## Core rule
+## Start here
 
-外部 crate の型を `lsharp-frame-contract`、WIT、L# plugin API へ露出しないでください。crate 固有の変換は adapter crate の内部へ閉じ込めます。
+Read the root [`AGENTS.md`](AGENTS.md), the closest scoped `AGENTS.md`, and the relevant
+architecture/ADR documents before changing code. Codex is the primary implementation path,
+but all committed instructions and validation must remain usable from Claude Code, Cursor,
+and ordinary shell workflows.
 
-## Local checks
+## Canonical workflow
 
 ```bash
-cargo fmt --check
-cargo clippy --workspace --all-targets -- -D warnings
-cargo test --workspace
+make doctor
+make context
+# For cross-cutting or multi-session work:
+make new-task SLUG=short-kebab-case-name
+
+# Iterate with narrow checks, then:
+make harness
+make ci
 ```
+
+Do not claim a command passed when it was not executed. Record unavailable checks and the
+exact environmental reason in the pull request or handoff.
+
+## Core boundary rule
+
+External crate types must not appear in `lsharp-frame-contract`, WIT, or the L# plugin API.
+Crate-specific conversions stay inside adapter crates, and concrete adapter selection stays
+inside application composition roots.
 
 ## Change categories
 
-- Contract change: `lsharp-frame-contract` または `wit/` の変更。互換性と migration note が必要です。
-- Core change: event routing、capability、resource lifecycle、kernel execution の変更。
-- Adapter change: crate／OS 固有実装。baseline contract を変更してはいけません。
-- Plugin change: L# plugin または SDK の変更。
+- **Contract change**: `lsharp-frame-contract` or `wit/`; requires compatibility, migration,
+  round-trip/conformance evidence, and coordinated Rust/L# documentation.
+- **Core change**: event routing, capability enforcement, resource lifecycle, or kernel
+  execution; requires deterministic observable-behavior tests.
+- **Adapter change**: crate/OS-specific implementation; baseline contracts remain unchanged
+  and the shared conformance suite must pass.
+- **Hot-path change**: boundary calls, PTY/terminal streams, large timelines, rendering, or
+  allocation; requires workload and measurement evidence.
+- **Plugin/kernel change**: L# behavior or SDK; host effects remain explicit and capability
+  checked.
 
-## Pull request expectations
+## Pull requests
 
-- observable behavior と受入条件を書く
-- hot path に新しい境界呼び出しを追加した場合は benchmark を付ける
-- adapter を追加した場合は conformance suite を通す
-- baseline で表せない機能は versioned extension として追加する
+Use the repository pull-request template. Include objective, non-goals, affected boundaries,
+exact validation results, unexecuted checks, compatibility impact, and residual risk.

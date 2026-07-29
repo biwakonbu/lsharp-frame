@@ -1,0 +1,10 @@
+---
+description: Public WIT compatibility rules
+globs:
+  - "wit/**/*.wit"
+  - "wit/**/*.md"
+alwaysApply: false
+---
+
+Read @AGENTS.md and @wit/AGENTS.md. WIT is a versioned public boundary. Keep calls coarse,
+portable, and independent of Rust/OS/GPU implementation types.

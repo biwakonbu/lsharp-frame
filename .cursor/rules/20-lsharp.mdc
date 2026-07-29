@@ -1,0 +1,11 @@
+---
+description: L# kernel and plugin rules
+globs:
+  - "kernel/**/*.ls"
+  - "plugins/**/*.ls"
+  - "plugins/**/*.toml"
+alwaysApply: false
+---
+
+Read @AGENTS.md. For kernel changes read @kernel/AGENTS.md; for plugin changes read
+@plugins/AGENTS.md. Keep host interaction effect-based and capability-checked.

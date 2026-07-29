@@ -1,0 +1,9 @@
+# Project-scoped Codex defaults. Model, provider, authentication, and telemetry remain
+# user-level concerns and must not be committed here.
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+project_doc_max_bytes = 65536
+project_root_markers = [".git", "Cargo.toml"]
+
+[features]
+multi_agent = true

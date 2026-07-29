@@ -8,3 +8,9 @@
 .env
 .env.*
 !.env.example
+
+# Agent-local state and credentials
+.claude/settings.local.json
+.cursor/mcp.json
+.mcp.json
+.codex-log/
