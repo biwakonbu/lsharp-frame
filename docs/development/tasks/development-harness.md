@@ -2,7 +2,7 @@
 
 - Slug: `development-harness`
 - Created: `2026-07-29`
-- Status: implemented; awaiting CI
+- Status: complete
 - Owner/agent: Codex-compatible harness bootstrap
 
 ## Objective
@@ -57,8 +57,11 @@ evidence-based handoff workflow. Codex is the primary implementation path.
 make harness                                      PASS in assembled repository snapshot
 make doctor                                       PASS (diagnostic; reports missing tools)
 git diff --check                                  PASS
-cargo fmt/check/clippy/test                        pending GitHub Actions
-wasm-tools component wit wit/frame.wit --json     pending GitHub Actions/local tool
+GitHub Actions CI run 30418831200                  PASS
+  Agent harness                                   PASS
+  Rust workspace 1.97.1: fmt/check/clippy/test    PASS
+  Rust MSRV 1.88.0: cargo check                   PASS
+wasm-tools component wit wit/frame.wit --json     NOT RUN: WIT was unchanged in this task
 L# compile/test                                    NOT RUN: lsharp unavailable
 ```
 
@@ -72,8 +75,8 @@ L# compile/test                                    NOT RUN: lsharp unavailable
 
 ## Handoff state
 
-- Current state: harness implementation and static validation complete; CI is the next gate.
+- Current state: implementation, static validation, pinned Rust validation, and MSRV validation complete.
 - Changed files: agent configs, Makefile/scripts, development docs/templates, CI/toolchain.
-- Checks run: assembled-repository `make harness`, shell syntax, JSON/TOML/link checks.
-- Checks not run and reason: Rust/L# checks unavailable in the current execution environment.
-- Next concrete action: inspect draft-PR CI and fix any toolchain/runtime discrepancy.
+- Checks run: repository harness, shell/JSON/TOML/link checks, Rust fmt/check/clippy/test, MSRV check.
+- Checks not run and reason: WIT unchanged; L# compiler unavailable in the execution environment.
+- Next concrete action: review and merge draft PR #1 when the repository policy is acceptable.
