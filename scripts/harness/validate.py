@@ -13,16 +13,18 @@ from typing import Iterable
 ROOT = Path(__file__).resolve().parents[2]
 ERRORS: list[str] = []
 
+SKILL_NAMES = (
+    "lsharp-frame-plan",
+    "lsharp-frame-implement",
+    "lsharp-frame-verify",
+    "lsharp-frame-review",
+    "lsharp-frame-handoff",
+)
 REQUIRED_FILES = (
     "AGENTS.md",
     "CLAUDE.md",
     ".codex/config.toml",
     ".claude/settings.json",
-    ".claude/commands/plan.md",
-    ".claude/commands/implement.md",
-    ".claude/commands/verify.md",
-    ".claude/commands/review.md",
-    ".claude/commands/handoff.md",
     ".cursor/rules/00-project.mdc",
     ".cursor/commands/plan.md",
     "Makefile",
@@ -94,6 +96,12 @@ def validate_required_files() -> None:
         if not (ROOT / relative).is_file():
             error(f"required harness file missing: {relative}")
 
+    for name in SKILL_NAMES:
+        for root in (".agents/skills", ".claude/skills"):
+            relative = f"{root}/{name}/SKILL.md"
+            if not (ROOT / relative).is_file():
+                error(f"required workflow skill missing: {relative}")
+
 
 def validate_instruction_hierarchy() -> None:
     root_agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
@@ -122,6 +130,34 @@ def validate_instruction_hierarchy() -> None:
 
     if (ROOT / ".cursorrules").exists():
         error("legacy .cursorrules is not allowed; use .cursor/rules/*.mdc")
+    if (ROOT / ".claude/commands").exists():
+        error("legacy .claude/commands is not allowed; use .claude/skills/*/SKILL.md")
+
+
+def validate_skills() -> None:
+    for name in SKILL_NAMES:
+        codex_path = ROOT / ".agents/skills" / name / "SKILL.md"
+        claude_path = ROOT / ".claude/skills" / name / "SKILL.md"
+        if not codex_path.is_file() or not claude_path.is_file():
+            continue
+
+        codex_text = codex_path.read_text(encoding="utf-8")
+        claude_text = claude_path.read_text(encoding="utf-8")
+        if codex_text != claude_text:
+            error(f"Codex/Claude skill drift detected: {name}")
+
+        if not codex_text.startswith("---\n"):
+            error(f"skill is missing YAML frontmatter: {name}")
+            continue
+        try:
+            frontmatter = codex_text.split("---", 2)[1]
+        except IndexError:
+            error(f"skill has malformed YAML frontmatter: {name}")
+            continue
+        if f"name: {name}" not in frontmatter:
+            error(f"skill frontmatter name mismatch: {name}")
+        if "description:" not in frontmatter:
+            error(f"skill description missing: {name}")
 
 
 def validate_configuration() -> None:
@@ -213,6 +249,7 @@ def main() -> int:
     validate_required_files()
     if not ERRORS:
         validate_instruction_hierarchy()
+        validate_skills()
         validate_configuration()
         validate_contract_independence()
         validate_markdown_links()

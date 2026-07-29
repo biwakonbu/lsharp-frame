@@ -20,6 +20,25 @@ CLAUDE.md                         thin import adapter for Claude Code
 The current task, repository files, tests, and recorded decisions are authoritative. Private
 chat memory is not an acceptable dependency for implementation or handoff.
 
+## Reusable workflow skills
+
+The same five workflows are provided to Codex and Claude Code as Agent Skills:
+
+```text
+.agents/skills/lsharp-frame-plan
+.agents/skills/lsharp-frame-implement
+.agents/skills/lsharp-frame-verify
+.agents/skills/lsharp-frame-review
+.agents/skills/lsharp-frame-handoff
+
+.claude/skills/<same-name>
+```
+
+Codex uses the repository-standard `.agents/skills` location. Claude Code uses its project
+`.claude/skills` location. The `SKILL.md` files are intentionally mirrored, and `make harness`
+fails if their contents drift. Cursor exposes the same workflows through
+`.cursor/commands/*.md` because Cursor commands use a different repository format.
+
 ## Canonical workflow
 
 ```text
@@ -42,16 +61,16 @@ fixes do not require a task record.
 
 ### Codex
 
-Codex is the primary coding path. It reads the root and nearest scoped `AGENTS.md` and uses
-`.codex/config.toml` for project-local execution defaults. Model/provider/authentication
-settings are intentionally not committed.
+Codex is the primary coding path. It reads the root and nearest scoped `AGENTS.md`, loads
+project skills from `.agents/skills`, and uses `.codex/config.toml` for project-local execution
+defaults. Model/provider/authentication settings are intentionally not committed.
 
 ### Claude Code
 
-`CLAUDE.md` imports the canonical instructions. `.claude/settings.json` grants a narrow set of
-read-only Git and repository validation commands while denying destructive Git/shell commands
-and likely secret files. User-local permission changes belong in
-`.claude/settings.local.json`, which is ignored.
+`CLAUDE.md` imports the canonical instructions. `.claude/skills` exposes the shared workflow
+skills, while `.claude/settings.json` grants a narrow set of read-only Git and repository
+validation commands and denies destructive Git/shell commands and likely secret files.
+User-local permission changes belong in `.claude/settings.local.json`, which is ignored.
 
 ### Cursor
 
@@ -77,8 +96,8 @@ make ci
 
 `make doctor` is diagnostic and reports unavailable optional tools without failing.
 `make harness` is independent of the Rust compiler and validates configuration, instruction
-hierarchy, Markdown links, workspace membership, and implementation-type leakage into stable
-contracts.
+hierarchy, skill parity, Markdown links, workspace membership, and implementation-type leakage
+into stable contracts.
 
 ## Agent handoff
 

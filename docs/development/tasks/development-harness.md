@@ -8,8 +8,9 @@
 ## Objective
 
 Provide a repository-owned development harness that lets Codex, Claude Code, Cursor, and
-ordinary shell users share one architecture policy, one validation command surface, and an
-evidence-based handoff workflow. Codex is the primary implementation path.
+ordinary shell users share one architecture policy, reusable workflow skills, one validation
+command surface, and an evidence-based handoff workflow. Codex is the primary implementation
+path.
 
 ## Non-goals
 
@@ -37,6 +38,8 @@ evidence-based handoff workflow. Codex is the primary implementation path.
 - [x] `AGENTS.md` is the canonical policy with scoped area instructions.
 - [x] Claude Code and Cursor use thin adapters rather than duplicated architecture policy.
 - [x] Codex project defaults are committed without personal model/provider/auth settings.
+- [x] Codex and Claude Code expose mirrored Agent Skills for plan, implement, verify, review,
+      and handoff workflows, with drift detected by `make harness`.
 - [x] All tools share `make` targets for context, validation, tests, and handoff preparation.
 - [x] The harness validates configuration syntax, links, workspace membership, and stable
       contract independence without requiring a Rust compiler.
@@ -46,7 +49,7 @@ evidence-based handoff workflow. Codex is the primary implementation path.
 ## Implementation plan
 
 1. Establish root and scoped canonical instruction files.
-2. Add thin Codex, Claude Code, and Cursor adapters and reusable commands.
+2. Add thin Codex, Claude Code, and Cursor adapters and reusable skills/commands.
 3. Add Makefile wrappers and deterministic harness validation scripts.
 4. Add task/handoff/definition-of-done documentation and PR template.
 5. Pin the Rust toolchain and run harness checks locally and Rust checks in CI.
@@ -57,7 +60,7 @@ evidence-based handoff workflow. Codex is the primary implementation path.
 make harness                                      PASS in assembled repository snapshot
 make doctor                                       PASS (diagnostic; reports missing tools)
 git diff --check                                  PASS
-GitHub Actions CI run 30418831200                  PASS
+GitHub Actions CI run 30418831200                  PASS before Agent Skills follow-up
   Agent harness                                   PASS
   Rust workspace 1.97.1: fmt/check/clippy/test    PASS
   Rust MSRV 1.88.0: cargo check                   PASS
@@ -68,15 +71,16 @@ L# compile/test                                    NOT RUN: lsharp unavailable
 ## Decisions and risks
 
 - Decision: repository policy lives in `AGENTS.md`; tool-specific files stay thin.
+- Decision: repository workflows use Agent Skills for Codex/Claude and commands for Cursor.
 - Decision: `make` is the canonical command surface for agents and humans.
 - Decision: Rust is pinned to `1.97.1` until an explicit upgrade change is reviewed.
-- Risk: Claude/Cursor permission and command-file schemas may evolve; the adapters are kept
-  small so such changes do not affect product policy.
+- Risk: tool-specific skill, permission, and command schemas may evolve; adapters are kept
+  small and validated so changes do not affect product policy.
 
 ## Handoff state
 
 - Current state: implementation, static validation, pinned Rust validation, and MSRV validation complete.
-- Changed files: agent configs, Makefile/scripts, development docs/templates, CI/toolchain.
+- Changed files: agent configs/skills, Makefile/scripts, development docs/templates, CI/toolchain.
 - Checks run: repository harness, shell/JSON/TOML/link checks, Rust fmt/check/clippy/test, MSRV check.
 - Checks not run and reason: WIT unchanged; L# compiler unavailable in the execution environment.
-- Next concrete action: review and merge draft PR #1 when the repository policy is acceptable.
+- Next concrete action: confirm current-head CI, then review and merge draft PR #1.
