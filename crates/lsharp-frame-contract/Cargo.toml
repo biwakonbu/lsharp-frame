@@ -1,0 +1,9 @@
+[package]
+name = "lsharp-frame-contract"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true

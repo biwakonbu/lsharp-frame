@@ -1,0 +1,15 @@
+[package]
+name = "lsharp-frame-headless"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+lsharp-frame-adapter-headless = { path = "../../crates/lsharp-frame-adapter-headless" }
+lsharp-frame-contract = { path = "../../crates/lsharp-frame-contract" }
+lsharp-frame-core = { path = "../../crates/lsharp-frame-core" }
+lsharp-frame-spi = { path = "../../crates/lsharp-frame-spi" }
+
+[lints]
+workspace = true

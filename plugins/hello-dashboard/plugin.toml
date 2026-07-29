@@ -1,0 +1,6 @@
+id = "dev.lsharp.frame.hello-dashboard"
+version = "0.1.0"
+api = "lsharp:frame@0.1.0"
+
+required_capabilities = ["ui-core"]
+optional_capabilities = ["notifications-show"]

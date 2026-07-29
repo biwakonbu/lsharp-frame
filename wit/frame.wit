@@ -1,0 +1,263 @@
+package lsharp:frame@0.1.0;
+
+interface types {
+  type node-id = u64;
+  type effect-id = u64;
+  type command-id = string;
+  type pty-session-id = u64;
+  type process-id = u64;
+  type surface-id = u64;
+
+  enum axis {
+    horizontal,
+    vertical,
+  }
+
+  record point {
+    x: f32,
+    y: f32,
+  }
+
+  record size {
+    width: f32,
+    height: f32,
+  }
+
+  record rect {
+    origin: point,
+    size: size,
+  }
+}
+
+interface ui {
+  use types.{axis, command-id, node-id, pty-session-id, surface-id};
+
+  enum text-role {
+    body,
+    label,
+    heading,
+    monospace,
+  }
+
+  record container-props {
+    axis: axis,
+    gap: f32,
+  }
+
+  record text-props {
+    text: string,
+    role: text-role,
+  }
+
+  record button-props {
+    label: string,
+    command: command-id,
+  }
+
+  record terminal-props {
+    session: pty-session-id,
+  }
+
+  record native-surface-props {
+    provider: string,
+    surface: surface-id,
+  }
+
+  variant node-kind {
+    row(container-props),
+    column(container-props),
+    stack,
+    split(container-props),
+    tabs,
+    scroll,
+    virtual-list,
+    text(text-props),
+    button(button-props),
+    text-input,
+    terminal(terminal-props),
+    canvas,
+    native-surface(native-surface-props),
+  }
+
+  record ui-node {
+    id: node-id,
+    kind: node-kind,
+    children: list<node-id>,
+  }
+
+  record replace-children {
+    parent: node-id,
+    children: list<node-id>,
+  }
+
+  variant ui-patch {
+    upsert(ui-node),
+    remove(node-id),
+    replace-children(replace-children),
+    set-root(option<node-id>),
+  }
+
+  record ui-transaction {
+    revision: u64,
+    patches: list<ui-patch>,
+  }
+}
+
+interface events {
+  use types.{command-id, effect-id, node-id, process-id, pty-session-id};
+
+  record command-event {
+    command: command-id,
+  }
+
+  record text-input-event {
+    node: node-id,
+    text: string,
+  }
+
+  record pty-output-event {
+    session: pty-session-id,
+    sequence: u64,
+    data: list<u8>,
+  }
+
+  record pty-exited-event {
+    session: pty-session-id,
+    exit-code: option<s32>,
+  }
+
+  record process-output-event {
+    process: process-id,
+    stderr: bool,
+    sequence: u64,
+    data: list<u8>,
+  }
+
+  record effect-completed-event {
+    effect: effect-id,
+    success: bool,
+    payload: list<u8>,
+  }
+
+  record custom-event {
+    namespace: string,
+    name: string,
+    payload: list<u8>,
+  }
+
+  variant frame-event {
+    command-invoked(command-event),
+    text-input(text-input-event),
+    pty-output(pty-output-event),
+    pty-exited(pty-exited-event),
+    process-output(process-output-event),
+    effect-completed(effect-completed-event),
+    custom(custom-event),
+  }
+
+  record event-batch {
+    sequence: u64,
+    events: list<frame-event>,
+  }
+}
+
+interface effects {
+  use types.{effect-id, process-id, pty-session-id};
+
+  enum capability {
+    ui-core,
+    ui-canvas,
+    ui-native-surface,
+    process-spawn,
+    pty-spawn,
+    filesystem-read,
+    filesystem-write,
+    network-connect,
+    clipboard-read,
+    clipboard-write,
+    notifications-show,
+    agent-control,
+  }
+
+  record pty-spawn-request {
+    program: string,
+    args: list<string>,
+    cwd: option<string>,
+    env: list<tuple<string, string>>,
+    columns: u16,
+    rows: u16,
+  }
+
+  record pty-write-request {
+    session: pty-session-id,
+    data: list<u8>,
+  }
+
+  record pty-resize-request {
+    session: pty-session-id,
+    columns: u16,
+    rows: u16,
+  }
+
+  record process-spawn-request {
+    program: string,
+    args: list<string>,
+    cwd: option<string>,
+    env: list<tuple<string, string>>,
+  }
+
+  record process-write-request {
+    process: process-id,
+    data: list<u8>,
+  }
+
+  record custom-effect {
+    namespace: string,
+    name: string,
+    payload: list<u8>,
+  }
+
+  variant effect-kind {
+    spawn-pty(pty-spawn-request),
+    write-pty(pty-write-request),
+    resize-pty(pty-resize-request),
+    spawn-process(process-spawn-request),
+    write-process(process-write-request),
+    custom(custom-effect),
+  }
+
+  record effect-request {
+    id: effect-id,
+    required-capability: capability,
+    kind: effect-kind,
+  }
+}
+
+interface plugin {
+  use effects.{capability, effect-request};
+  use events.{event-batch};
+  use ui.{ui-transaction};
+
+  record plugin-manifest {
+    id: string,
+    version: string,
+    required-capabilities: list<capability>,
+    optional-capabilities: list<capability>,
+  }
+
+  record plugin-update {
+    ui: option<ui-transaction>,
+    effects: list<effect-request>,
+  }
+
+  manifest: func() -> plugin-manifest;
+  activate: func() -> result<plugin-update, string>;
+  dispatch: func(events: event-batch) -> result<plugin-update, string>;
+  snapshot: func() -> list<u8>;
+  restore: func(snapshot: list<u8>) -> result<plugin-update, string>;
+  deactivate: func();
+}
+
+world frame-plugin {
+  export plugin;
+}

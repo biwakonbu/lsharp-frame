@@ -1,0 +1,13 @@
+[package]
+name = "lsharp-frame-adapter-headless"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+lsharp-frame-contract = { path = "../lsharp-frame-contract" }
+lsharp-frame-spi = { path = "../lsharp-frame-spi" }
+
+[lints]
+workspace = true
