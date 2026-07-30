@@ -1,0 +1,9 @@
+---
+description: ドキュメントと ADR の規則
+globs:
+  - "docs/**/*.md"
+alwaysApply: false
+---
+
+@AGENTS.md と @docs/AGENTS.md を読む。長期的な判断と短期的なタスク計画を分離し、完了主張を
+正確な証跡で裏付ける。ユーザーが別言語を指定しない限り、日本語で記述する。

@@ -9,16 +9,34 @@ permissions:
   contents: read
 
 jobs:
-  rust:
+  harness:
+    name: エージェントハーネス
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
-      - name: Format
-        run: cargo fmt --check
-      - name: Clippy
-        run: cargo clippy --workspace --all-targets -- -D warnings
-      - name: Test
-        run: cargo test --workspace
+      - name: リポジトリハーネスを検証
+        run: make harness
+
+  rust:
+    name: Rust workspace (1.97.1)
+    needs: harness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 固定 Rust toolchain をインストール
+        run: rustup toolchain install 1.97.1 --profile minimal --component rustfmt,clippy
+      - name: 固定 Rust toolchain を選択
+        run: rustup default 1.97.1
+      - name: 完全検証を実行
+        run: make ci
+
+  msrv:
+    name: Rust MSRV (1.88.0)
+    needs: harness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 宣言済み最小 Rust toolchain をインストール
+        run: rustup toolchain install 1.88.0 --profile minimal
+      - name: 宣言済み MSRV を検証
+        run: cargo +1.88.0 check --workspace --all-targets

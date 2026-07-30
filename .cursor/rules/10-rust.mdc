@@ -1,0 +1,13 @@
+---
+description: Rust workspace の境界規則
+globs:
+  - "crates/**/*.rs"
+  - "crates/**/Cargo.toml"
+  - "apps/**/*.rs"
+  - "apps/**/Cargo.toml"
+alwaysApply: false
+---
+
+@AGENTS.md と @crates/AGENTS.md を読む。`apps/**` では @apps/AGENTS.md も読む。
+外部 GUI、renderer、runtime、PTY、OS crate の型を adapter または composition root の外へ漏らさず、
+安定 contract へ含めない。説明、レビュー、引き継ぎは日本語で出力する。
