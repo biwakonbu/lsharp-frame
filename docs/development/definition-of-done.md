@@ -1,33 +1,34 @@
-# Definition of Done
+# 完了の定義
 
-A change is complete only when all applicable conditions below are met.
+変更は、適用可能な以下の条件をすべて満たした場合にのみ完了とします。
 
-## Behavior
+## 振る舞い
 
-- The objective and observable acceptance criteria are satisfied.
-- Explicit non-goals remain out of scope.
-- Failure, cancellation, ordering, and resource-lifecycle behavior are defined where relevant.
+- 目的と、観測可能な受入条件を満たしている。
+- 明示した非目標が対象外のまま維持されている。
+- 必要に応じて、失敗、キャンセル、順序、resource lifecycle の振る舞いが定義されている。
 
-## Architecture
+## アーキテクチャ
 
-- Stable contracts contain only L#frame-owned semantic types.
-- Concrete crate/OS/toolkit types remain inside adapters or composition roots.
-- Capability checks fail closed.
-- No fine-grained Component boundary calls are introduced into a hot path.
-- Product behavior remains in L# or core policy rather than drifting into a concrete adapter.
+- 安定 contract が L#frame 所有の意味型だけで構成されている。
+- 具体的な crate／OS／toolkit の型が adapter または composition root 内に閉じている。
+- Capability 検査が fail closed である。
+- 高負荷経路に細粒度の Component 境界呼び出しを追加していない。
+- プロダクトの振る舞いが具体 adapter へ流出せず、L# または Core policy に残っている。
 
-## Evidence
+## 証跡
 
-- Relevant tests exist and pass.
-- `make harness` passes.
-- `make ci` passes, or each unavailable step is named with the exact environmental reason.
-- Benchmarks are updated for hot-path changes.
-- Conformance evidence exists for adapter changes.
-- Compatibility and migration evidence exists for WIT or stable contract changes.
+- 関連するテストが存在し、成功している。
+- `make harness` が成功している。
+- `make ci` が成功している。または、利用できない各手順と正確な環境上の理由を記載している。
+- 高負荷経路を変更した場合、benchmark を更新している。
+- Adapter を変更した場合、conformance の証跡がある。
+- WIT または安定 contract を変更した場合、互換性と移行の証跡がある。
 
-## Documentation and review
+## ドキュメントとレビュー
 
-- Documentation and ADRs are updated where the observable contract changed.
-- The final diff contains no unrelated changes, generated noise, credentials, or machine paths.
-- Review found no blocking issue under the root `AGENTS.md` criteria.
-- Handoff state is recorded when work is incomplete or crosses sessions.
+- 観測可能な contract を変更した場合、関連ドキュメントと ADR を更新している。
+- 最終差分に無関係な変更、生成ノイズ、認証情報、マシン固有 path が含まれていない。
+- ルート `AGENTS.md` の基準に照らして blocking issue がない。
+- AI が生成する自然言語が、ユーザー指定の例外を除き日本語になっている。
+- 作業が未完了または複数セッションにまたがる場合、引き継ぎ状態を記録している。

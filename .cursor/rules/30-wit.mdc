@@ -1,10 +1,10 @@
 ---
-description: Public WIT compatibility rules
+description: 公開 WIT 互換性規則
 globs:
   - "wit/**/*.wit"
   - "wit/**/*.md"
 alwaysApply: false
 ---
 
-Read @AGENTS.md and @wit/AGENTS.md. WIT is a versioned public boundary. Keep calls coarse,
-portable, and independent of Rust/OS/GPU implementation types.
+@AGENTS.md と @wit/AGENTS.md を読む。WIT はバージョン付き公開境界である。呼び出しを粗粒度かつ
+移植可能に保ち、Rust／OS／GPU の実装型から独立させる。説明、レビュー、引き継ぎは日本語で出力する。

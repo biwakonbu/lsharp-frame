@@ -1,13 +1,13 @@
-# Task Records
+# タスク記録
 
-Task records are execution state for cross-cutting or multi-session work. They are not a
-second source of architectural truth.
+タスク記録は、横断的または複数セッションにまたがる作業の実行状態を保持します。
+アーキテクチャ判断の第二の正本にはしません。
 
-Create one with:
+次のコマンドで作成します。
 
 ```bash
 make new-task SLUG=short-kebab-case-name
 ```
 
-Keep the record current while work is active. On completion, retain concise outcome and
-evidence links or replace durable decisions with an ADR and close the task state.
+作業中は記録を最新に保ちます。完了時は成果と証跡への link を簡潔に残すか、長期的な判断を ADR へ
+移してタスクを閉じます。

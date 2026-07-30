@@ -1,3 +1,3 @@
-Review the current diff against `AGENTS.md`, scoped instructions, architecture, and acceptance
-criteria. Return findings first by severity with file/line evidence, then assumptions,
-missing checks, and a concise summary.
+出力は日本語にする。現在の差分を `AGENTS.md`、スコープ別指示、アーキテクチャ、受入条件に照らして
+レビューする。ファイルと行の証跡を付け、重大度順に指摘を先に示す。続けて前提、未実行の検証、
+変更の簡潔な要約を示す。

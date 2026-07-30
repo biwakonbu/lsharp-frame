@@ -1,12 +1,13 @@
-# WIT contract instructions
+# WIT Contract 向け指示
 
-These instructions extend the repository root `AGENTS.md` for `wit/**`.
+この指示は、`wit/**` に対してルート `AGENTS.md` を補足します。
 
-WIT is a public compatibility boundary.
+WIT は公開互換性境界です。
 
-- Use versioned packages and small, capability-oriented interfaces.
-- Prefer L#frame semantic records, variants, lists, and resources.
-- Never expose crate names, Rust layouts, OS handles, GPU objects, or trait objects.
-- Avoid per-byte, per-glyph, or per-widget boundary calls; define batch operations.
-- Document compatibility and migration behavior for every changed public shape.
-- Keep baseline portable APIs separate from backend-specific extensions.
+- バージョン付き package と、小さな Capability 指向 interface を使用します。
+- L#frame の意味 record、variant、list、resource を優先します。
+- crate 名、Rust layout、OS handle、GPU object、trait object を露出しません。
+- byte、glyph、widget 単位の境界呼び出しを避け、batch operation を定義します。
+- 公開 shape を変更するたびに、互換性と移行方法を記述します。
+- 移植可能な baseline API と backend 固有 extension を分離します。
+- AI の説明、レビュー、引き継ぎは原則として日本語で出力します。

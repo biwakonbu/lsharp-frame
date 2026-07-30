@@ -1,9 +1,11 @@
-# Documentation instructions
+# ドキュメント向け指示
 
-These instructions extend the repository root `AGENTS.md` for `docs/**`.
+この指示は、`docs/**` に対してルート `AGENTS.md` を補足します。
 
-- Describe current observable contracts, not aspirational implementation as completed work.
-- Keep durable decisions in ADRs and transient execution plans in `docs/development/tasks/`.
-- Include evidence paths and exact command names instead of vague claims.
-- Update links when moving or renaming documents.
-- Architecture documents are normative only when explicitly marked or referenced as such.
+- 将来の構想を完了済み実装として書かず、現在観測できる contract を記述します。
+- 長期的な判断は ADR、短期的な実行計画は `docs/development/tasks/` に置きます。
+- 曖昧な完了表現ではなく、証跡 path と正確なコマンド名を記載します。
+- ドキュメントを移動または改名した場合は link を更新します。
+- アーキテクチャ文書は、規範的であると明示されるか正本から参照された場合にのみ規範とします。
+- ユーザーが別言語を指定しない限り、AI が生成する説明文、レビュー、タスク記録、引き継ぎは
+  日本語で記述します。

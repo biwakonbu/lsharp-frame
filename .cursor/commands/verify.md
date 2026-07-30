@@ -1,3 +1,3 @@
-Inspect the current diff, run `make doctor`, `make harness`, and `make ci` when available,
-then report exact commands, results, unavailable tools, and residual risks. Do not weaken a
-gate to make it pass.
+出力は日本語にする。現在の差分を確認し、利用可能な場合は `make doctor`、`make harness`、`make ci` を
+実行する。正確なコマンド、結果、利用できないツール、残存リスクを報告する。成功させるために gate
+を弱めてはいけない。

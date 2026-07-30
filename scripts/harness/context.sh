@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-printf '# L#frame repository context\n\n'
+printf '# L#frame リポジトリコンテキスト\n\n'
 printf '## Git\n'
-printf 'branch: %s\n' "$(git branch --show-current 2>/dev/null || printf detached)"
-printf 'head: %s\n' "$(git rev-parse --short HEAD 2>/dev/null || printf none)"
-printf 'status:\n'
+printf 'ブランチ: %s\n' "$(git branch --show-current 2>/dev/null || printf detached)"
+printf 'HEAD: %s\n' "$(git rev-parse --short HEAD 2>/dev/null || printf none)"
+printf '状態:\n'
 git status --short || true
 
-printf '\n## Workspace members\n'
+printf '\n## Workspace member\n'
 python3 - <<'PY'
 from pathlib import Path
 import tomllib
@@ -18,7 +18,7 @@ for member in cargo.get("workspace", {}).get("members", []):
     print(f"- {member}")
 PY
 
-printf '\n## Canonical documents\n'
+printf '\n## 正本ドキュメント\n'
 for path in \
   AGENTS.md \
   docs/architecture.md \
@@ -29,6 +29,6 @@ for path in \
   [[ -f "$path" ]] && printf -- '- %s\n' "$path"
 done
 
-printf '\n## Active task records\n'
+printf '\n## 進行中のタスク記録\n'
 find docs/development/tasks -maxdepth 1 -type f -name '*.md' \
   ! -name README.md ! -name TEMPLATE.md -print | sort | sed 's#^#- #' || true

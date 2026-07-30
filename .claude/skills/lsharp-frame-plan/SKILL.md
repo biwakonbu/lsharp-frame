@@ -1,17 +1,20 @@
 ---
 name: lsharp-frame-plan
-description: Plan an L#frame repository change before implementation. Use for cross-cutting work, contract changes, migrations, or any task that needs explicit acceptance criteria and validation.
+description: L#frame リポジトリの変更を実装前に計画する。横断的変更、contract 変更、移行、明示的な受入条件と検証が必要な作業で使用する。
 ---
 
-# Plan an L#frame change
+# L#frame の変更を計画する
 
-1. Read `AGENTS.md`, the closest scoped `AGENTS.md`, and relevant architecture/ADR files.
-2. Inspect the current implementation and tests before proposing changes.
-3. State the objective, observable outcome, and explicit non-goals.
-4. Identify affected Rust, WIT, L#, capability, resource-lifecycle, and performance boundaries.
-5. Define deterministic acceptance criteria and evidence.
-6. Order implementation steps by dependency and list exact validation commands.
-7. Record compatibility, migration, and residual risks.
-8. For cross-cutting or multi-session work, run `make new-task SLUG=<short-kebab-case-name>` and fill the task record.
+出力は日本語にする。ユーザーが明示的に別言語を指定した場合のみ、その指定へ従う。
 
-Do not modify product code unless implementation was also requested.
+1. `AGENTS.md`、最も近いスコープ別 `AGENTS.md`、関連するアーキテクチャ文書と ADR を読む。
+2. 変更案を作る前に、現在の実装とテストを調査する。
+3. 目的、観測可能な成果、明示的な非目標を記述する。
+4. 影響する Rust、WIT、L#、Capability、resource lifecycle、性能境界を特定する。
+5. 決定的な受入条件と証跡を定義する。
+6. 実装手順を依存順に並べ、正確な検証コマンドを記載する。
+7. 互換性、移行、残存リスクを記録する。
+8. 横断的または複数セッションにまたがる作業では、`make new-task SLUG=<short-kebab-case-name>` を
+   実行してタスク記録を作成する。
+
+実装も依頼されていない限り、プロダクトコードを変更しない。

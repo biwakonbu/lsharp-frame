@@ -9,7 +9,7 @@
 .env.*
 !.env.example
 
-# Agent-local state and credentials
+# エージェント固有のローカル状態と認証情報
 .claude/settings.local.json
 .cursor/mcp.json
 .mcp.json

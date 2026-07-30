@@ -1,17 +1,19 @@
 ---
 name: lsharp-frame-handoff
-description: Prepare an evidence-based L#frame handoff for another agent or session. Use when work is incomplete, paused, or changing ownership.
+description: 別のエージェントまたはセッション向けに、証跡を伴う L#frame の引き継ぎを作成する。作業が未完了、停止中、担当変更となる場合に使用する。
 ---
 
-# Prepare an L#frame handoff
+# L#frame の引き継ぎを作成する
 
-Use `docs/development/handoffs/TEMPLATE.md` and include:
+出力は日本語にする。ユーザーが明示的に別言語を指定した場合のみ、その指定へ従う。
 
-- objective and current observable state;
-- changed files and durable decisions;
-- exact checks run and their results;
-- exact checks not run and the reason;
-- known risks and remaining work;
-- the next concrete command or implementation action.
+`docs/development/handoffs/TEMPLATE.md` を使用し、次を含める。
 
-Do not claim completion without evidence. Move durable decisions to an ADR rather than leaving them only in the handoff.
+- 目的と現在観測できる状態。
+- 変更したファイルと長期的な判断。
+- 実行した検証と正確な結果。
+- 未実行の検証とその理由。
+- 既知のリスクと残作業。
+- 次に実行する具体的なコマンドまたは実装作業。
+
+証跡なしに完了を主張しない。長期的な判断は引き継ぎだけに残さず ADR へ移す。

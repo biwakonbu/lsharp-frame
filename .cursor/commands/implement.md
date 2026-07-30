@@ -1,3 +1,3 @@
-Follow `AGENTS.md`, scoped instructions, and any active task record. Inspect code/tests first,
-make the smallest coherent change, add observable-behavior tests, preserve architecture
-boundaries, run repository `make` targets, and state exact unexecuted checks.
+出力は日本語にする。`AGENTS.md`、スコープ別指示、進行中のタスク記録に従う。既存コードとテストを
+先に調査し、最小で一貫した変更を実装する。観測可能な振る舞いのテストを追加し、アーキテクチャ
+境界を維持し、リポジトリの `make` target を実行して、未実行の検証を正確に報告する。

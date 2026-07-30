@@ -1,10 +1,10 @@
-# Development
+# 開発
 
-This directory contains transient engineering workflow records and validation policy.
-Durable product and architecture decisions belong in the top-level architecture documents
-or `docs/adr/`.
+このディレクトリには、一時的な開発ワークフロー記録と検証方針を置きます。
+長期的なプロダクト判断とアーキテクチャ判断は、トップレベルのアーキテクチャ文書または
+`docs/adr/` に記録します。
 
-- [Agent harness](agent-harness.md)
-- [Definition of done](definition-of-done.md)
-- [Task records](tasks/README.md)
-- [Handoffs](handoffs/README.md)
+- [エージェントハーネス](agent-harness.md)
+- [完了の定義](definition-of-done.md)
+- [タスク記録](tasks/README.md)
+- [引き継ぎ](handoffs/README.md)

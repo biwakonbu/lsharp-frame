@@ -1,5 +1,5 @@
 ---
-description: Rust workspace boundary rules
+description: Rust workspace の境界規則
 globs:
   - "crates/**/*.rs"
   - "crates/**/Cargo.toml"
@@ -8,6 +8,6 @@ globs:
 alwaysApply: false
 ---
 
-Read @AGENTS.md and @crates/AGENTS.md. For `apps/**`, also read @apps/AGENTS.md.
-External GUI, renderer, runtime, PTY, and OS crate types must stay inside adapters or
-composition roots and must not leak into stable contracts.
+@AGENTS.md と @crates/AGENTS.md を読む。`apps/**` では @apps/AGENTS.md も読む。
+外部 GUI、renderer、runtime、PTY、OS crate の型を adapter または composition root の外へ漏らさず、
+安定 contract へ含めない。説明、レビュー、引き継ぎは日本語で出力する。

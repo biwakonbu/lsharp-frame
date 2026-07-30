@@ -1,21 +1,23 @@
 ---
 name: lsharp-frame-review
-description: Review an L#frame diff for correctness, architecture, safety, performance, and missing evidence. Use for pre-PR or pull-request review.
+description: L#frame の差分を、正しさ、アーキテクチャ、安全性、性能、証跡不足の観点でレビューする。PR 前または PR レビューで使用する。
 ---
 
-# Review an L#frame change
+# L#frame の変更をレビューする
 
-Review the complete diff against `AGENTS.md`, scoped instructions, architecture documents, and acceptance criteria.
+出力は日本語にする。ユーザーが明示的に別言語を指定した場合のみ、その指定へ従う。
 
-Return findings first, ordered by severity, with file and line evidence. Treat these as blocking:
+完全な差分を `AGENTS.md`、スコープ別指示、アーキテクチャ文書、受入条件に照らして確認する。
 
-- external implementation types leaking into stable contracts;
-- fine-grained L#/Rust calls in hot paths;
-- fail-open capability behavior;
-- UI-thread blocking by plugin work;
-- PTY/process ordering, bytes, cancellation, or lifecycle loss;
-- baseline APIs that silently depend on one backend;
-- tests that miss observable behavior;
-- validation claims for commands that were not executed.
+指摘を重大度順に先に示し、ファイルと行の証跡を付ける。次を blocking として扱う。
 
-Then list assumptions, missing checks, and a concise change summary.
+- 外部実装型が安定 contract へ漏洩している。
+- 高負荷経路で L#／Rust 間の細粒度呼び出しを行っている。
+- Capability が fail open になっている。
+- plugin 処理が UI thread を block している。
+- PTY／process の順序、byte、cancel、lifecycle が失われる。
+- baseline API が暗黙的に1つの backend へ依存している。
+- テストが観測可能な振る舞いを検証していない。
+- 実行していないコマンドを成功したと記載している。
+
+続けて、前提、未実行の検証、変更の簡潔な要約を示す。

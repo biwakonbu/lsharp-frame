@@ -1,28 +1,31 @@
-# Development Agent Harness
+# 開発エージェントハーネス
 
-## Purpose
+## 目的
 
-L#frame is developed with Codex, Claude Code, and Cursor. Codex is the default implementation
-agent, but repository knowledge must remain portable between all three. The harness therefore
-keeps one tool-neutral policy source and treats tool-specific files as adapters.
+L#frame は Codex、Claude Code、Cursor を併用して開発します。Codex を既定の実装エージェントと
+しますが、リポジトリ知識は3つのツール間で移植可能でなければなりません。そのため、ハーネスは
+ツール非依存の方針を1つだけ正本として持ち、ツール固有ファイルをアダプターとして扱います。
 
-## Instruction hierarchy
+ユーザーが別言語を明示しない限り、各エージェントが生成する計画、進捗、説明、レビュー、
+引き継ぎ、Issue／PR 文面、コミットメッセージ、ドキュメントは日本語に統一します。
+
+## 指示の階層
 
 ```text
-AGENTS.md                         repository-wide canonical policy
-<area>/AGENTS.md                  scoped policy for crates/apps/kernel/plugins/wit/docs
-CLAUDE.md                         thin import adapter for Claude Code
-<area>/CLAUDE.md                  scoped Claude import adapter
-.cursor/rules/*.mdc               Cursor activation/glob adapters
-.codex/config.toml                project execution defaults, not architecture policy
+AGENTS.md                         リポジトリ全体の方針の正本
+<area>/AGENTS.md                  crates/apps/kernel/plugins/wit/docs のスコープ別方針
+CLAUDE.md                         Claude Code 用の薄い import adapter
+<area>/CLAUDE.md                  Claude Code 用のスコープ別 import adapter
+.cursor/rules/*.mdc               Cursor の activation／glob adapter
+.codex/config.toml                プロジェクト実行既定値。アーキテクチャ方針は置かない
 ```
 
-The current task, repository files, tests, and recorded decisions are authoritative. Private
-chat memory is not an acceptable dependency for implementation or handoff.
+現在のタスク、リポジトリ内のファイル、テスト、記録済みの判断を正本とします。実装や引き継ぎを、
+非公開のチャットメモリへ依存させてはいけません。
 
-## Reusable workflow skills
+## 再利用可能なワークフロー Skill
 
-The same five workflows are provided to Codex and Claude Code as Agent Skills:
+Codex と Claude Code には同じ5つの Agent Skill を提供します。
 
 ```text
 .agents/skills/lsharp-frame-plan
@@ -31,56 +34,54 @@ The same five workflows are provided to Codex and Claude Code as Agent Skills:
 .agents/skills/lsharp-frame-review
 .agents/skills/lsharp-frame-handoff
 
-.claude/skills/<same-name>
+.claude/skills/<同じ名前>
 ```
 
-Codex uses the repository-standard `.agents/skills` location. Claude Code uses its project
-`.claude/skills` location. The `SKILL.md` files are intentionally mirrored, and `make harness`
-fails if their contents drift. Cursor exposes the same workflows through
-`.cursor/commands/*.md` because Cursor commands use a different repository format.
+Codex はリポジトリ標準の `.agents/skills` を使用し、Claude Code は `.claude/skills` を使用します。
+両方の `SKILL.md` は意図的に同一内容とし、差分が生じた場合は `make harness` を失敗させます。
+Cursor はリポジトリ形式が異なるため、同等のワークフローを `.cursor/commands/*.md` で提供します。
 
-## Canonical workflow
+## 正規ワークフロー
 
 ```text
-inspect
-  -> define objective/non-goals/acceptance
-  -> create task record when cross-cutting
-  -> implement smallest coherent slice
-  -> run narrow checks
+調査
+  -> 目的／非目標／受入条件を定義
+  -> 横断的な作業ではタスク記録を作成
+  -> 最小で一貫した単位を実装
+  -> 対象を絞った検証を実行
   -> make harness
   -> make ci
-  -> review diff
-  -> handoff with evidence
+  -> 差分をレビュー
+  -> 証跡付きで引き継ぎ
 ```
 
-Use `make new-task SLUG=<slug>` when work changes a stable contract, spans multiple subsystems,
-is expected to cross sessions, or needs explicit migration/benchmark evidence. Small localized
-fixes do not require a task record.
+安定契約の変更、複数 subsystem にまたがる変更、複数セッションを要する作業、明示的な移行証跡や
+benchmark 証跡が必要な作業では `make new-task SLUG=<slug>` を使用します。小規模で局所的な修正には
+タスク記録を必須としません。
 
-## Tool roles
+## ツールの役割
 
 ### Codex
 
-Codex is the primary coding path. It reads the root and nearest scoped `AGENTS.md`, loads
-project skills from `.agents/skills`, and uses `.codex/config.toml` for project-local execution
-defaults. Model/provider/authentication settings are intentionally not committed.
+Codex を主要な実装経路とします。ルートと最も近いスコープ別 `AGENTS.md` を読み、
+`.agents/skills` から project skill を読み込み、`.codex/config.toml` のプロジェクト既定値を使用します。
+モデル、provider、認証の個人設定はコミットしません。
 
 ### Claude Code
 
-`CLAUDE.md` imports the canonical instructions. `.claude/skills` exposes the shared workflow
-skills, while `.claude/settings.json` grants a narrow set of read-only Git and repository
-validation commands and denies destructive Git/shell commands and likely secret files.
-User-local permission changes belong in `.claude/settings.local.json`, which is ignored.
+`CLAUDE.md` が正本の指示を import します。`.claude/skills` が共通ワークフロー Skill を提供し、
+`.claude/settings.json` は読み取り専用 Git コマンドとリポジトリ検証コマンドを限定的に許可し、
+破壊的な Git／shell コマンドと機密情報らしいファイルを拒否します。ユーザー固有の権限変更は、
+ignore 済みの `.claude/settings.local.json` に置きます。
 
 ### Cursor
 
-`.cursor/rules/*.mdc` selects the same canonical instructions by path. Commands under
-`.cursor/commands/` mirror the shared planning, implementation, verification, review, and
-handoff workflow without redefining architecture.
+`.cursor/rules/*.mdc` が path に応じて同じ正本指示を選択します。`.cursor/commands/` は
+アーキテクチャを再定義せず、計画、実装、検証、レビュー、引き継ぎの共通ワークフローを提供します。
 
-## Repository commands
+## リポジトリコマンド
 
-All agents use `make` targets so validation does not drift between tools:
+全エージェントは `make` target を使用し、ツール間で検証手順が分岐しないようにします。
 
 ```text
 make doctor
@@ -94,20 +95,19 @@ make wit-check
 make ci
 ```
 
-`make doctor` is diagnostic and reports unavailable optional tools without failing.
-`make harness` is independent of the Rust compiler and validates configuration, instruction
-hierarchy, skill parity, Markdown links, workspace membership, and implementation-type leakage
-into stable contracts.
+`make doctor` は診断専用であり、任意ツールが利用できなくても失敗しません。`make harness` は
+Rust compiler に依存せず、設定、指示階層、日本語出力規則、Skill parity、Markdown link、workspace
+member、安定 contract への実装型漏洩を検証します。
 
-## Agent handoff
+## エージェント間の引き継ぎ
 
-Use [the handoff template](handoffs/TEMPLATE.md) when another agent or session must continue
-work. A valid handoff names exact checks and unexecuted steps; it does not merely summarize
-intent.
+別のエージェントまたはセッションが作業を継続する場合は、[引き継ぎテンプレート](handoffs/TEMPLATE.md)
+を使用します。有効な引き継ぎには、実行した検証と未実行の検証を正確に記載し、意図の要約だけで
+終わらせません。
 
-## Local-only configuration
+## ローカル専用設定
 
-Do not commit:
+次をコミットしてはいけません。
 
 ```text
 .claude/settings.local.json
@@ -117,5 +117,4 @@ Do not commit:
 .codex-log/
 ```
 
-Secrets, personal model preferences, MCP credentials, and machine-specific paths stay out of
-the repository.
+秘密情報、個人のモデル設定、MCP 認証情報、マシン固有 path をリポジトリへ含めません。

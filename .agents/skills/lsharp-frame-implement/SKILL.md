@@ -1,15 +1,17 @@
 ---
 name: lsharp-frame-implement
-description: Implement a scoped L#frame change from agreed acceptance criteria. Use when editing Rust, WIT, L#, adapters, plugins, tests, or engineering documentation.
+description: 合意済みの受入条件から、対象を絞った L#frame の変更を実装する。Rust、WIT、L#、adapter、plugin、test、開発文書を編集する場合に使用する。
 ---
 
-# Implement an L#frame change
+# L#frame の変更を実装する
 
-1. Read `AGENTS.md`, the closest scoped `AGENTS.md`, and any active task record.
-2. Inspect existing code and tests; do not infer unseen behavior.
-3. Implement the smallest coherent slice that satisfies the acceptance criteria.
-4. Preserve contract/adapter boundaries and keep host effects capability-checked.
-5. Add or update observable-behavior tests with the implementation.
-6. Run narrow checks while iterating, then `make harness` and applicable `make` validation targets.
-7. Review the final diff for unrelated changes, architecture leakage, and missing evidence.
-8. Report every unexecuted check and its exact reason.
+出力は日本語にする。ユーザーが明示的に別言語を指定した場合のみ、その指定へ従う。
+
+1. `AGENTS.md`、最も近いスコープ別 `AGENTS.md`、進行中のタスク記録を読む。
+2. 既存コードとテストを調査し、見ていない振る舞いを推測しない。
+3. 受入条件を満たす、最小で一貫した変更を実装する。
+4. contract／adapter 境界を維持し、host effect を Capability 検査対象にする。
+5. 実装と同時に、観測可能な振る舞いを検証するテストを追加または更新する。
+6. 実装中は対象を絞った検証を実行し、最後に `make harness` と適用可能な `make` target を実行する。
+7. 最終差分を確認し、無関係な変更、アーキテクチャ漏洩、証跡不足を除去する。
+8. 未実行の検証と正確な理由をすべて報告する。

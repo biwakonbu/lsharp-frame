@@ -1,13 +1,15 @@
 ---
 name: lsharp-frame-verify
-description: Verify an L#frame working tree or branch without changing product behavior. Use before handoff, review, commit, or pull-request readiness decisions.
+description: プロダクトの振る舞いを変更せず、L#frame の working tree または branch を検証する。引き継ぎ、レビュー、コミット、PR ready 判断の前に使用する。
 ---
 
-# Verify an L#frame change
+# L#frame の変更を検証する
 
-1. Read `AGENTS.md` and scoped instructions.
-2. Inspect `git status` and the complete diff.
-3. Run `make doctor`, `make harness`, and `make ci` when the required tools are available.
-4. Run `make wit-check` for WIT changes and L# checks when `lsharp` is available.
-5. Map failures to root causes; do not weaken lint, compatibility, or safety gates.
-6. Report exact commands, results, unavailable tools, and residual risk.
+出力は日本語にする。ユーザーが明示的に別言語を指定した場合のみ、その指定へ従う。
+
+1. `AGENTS.md` とスコープ別指示を読む。
+2. `git status` と完全な差分を確認する。
+3. 必要なツールが利用可能なら、`make doctor`、`make harness`、`make ci` を実行する。
+4. WIT を変更した場合は `make wit-check`、`lsharp` が利用可能なら L# の検証を実行する。
+5. 失敗を根本原因へ対応付け、lint、互換性、安全性の gate を弱めない。
+6. 正確なコマンド、結果、利用できないツール、残存リスクを報告する。

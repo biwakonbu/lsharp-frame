@@ -1,57 +1,57 @@
 # <task-title>
 
 - Slug: `<task-slug>`
-- Created: `<yyyy-mm-dd>`
-- Status: proposed
-- Owner/agent: unassigned
+- 作成日: `<yyyy-mm-dd>`
+- 状態: 提案中
+- 担当者／エージェント: 未割当
 
-## Objective
+## 目的
 
-Describe the observable user/developer outcome.
+ユーザーまたは開発者が観測できる成果を記述します。
 
-## Non-goals
+## 非目標
 
-- State what this task deliberately will not change.
+- このタスクで意図的に変更しない範囲を記述します。
 
-## Context and authority
+## コンテキストと正本
 
-- Relevant architecture documents:
-- Relevant ADRs:
-- Existing implementation/tests:
+- 関連するアーキテクチャ文書:
+- 関連する ADR:
+- 既存実装／テスト:
 
-## Affected boundaries
+## 影響する境界
 
-- Rust contract/core/adapter:
-- WIT/L#:
-- Capability/resource lifecycle:
-- Performance/hot path:
+- Rust contract／core／adapter:
+- WIT／L#:
+- Capability／resource lifecycle:
+- 性能／高負荷経路:
 
-## Acceptance criteria
+## 受入条件
 
-- [ ] Observable criterion with a deterministic evidence path.
-- [ ] Failure and compatibility behavior are covered where relevant.
+- [ ] 決定的な証跡経路を持つ、観測可能な条件。
+- [ ] 必要に応じて失敗時と互換性の振る舞いを検証している。
 
-## Implementation plan
+## 実装計画
 
-1. Ordered step.
+1. 依存順の手順。
 
-## Validation
+## 検証
 
 ```text
 make harness
-<additional narrow commands>
+<追加の対象別コマンド>
 make ci
 ```
 
-## Decisions and risks
+## 判断事項とリスク
 
-- Decision:
-- Risk or migration concern:
+- 判断:
+- リスクまたは移行上の懸念:
 
-## Handoff state
+## 引き継ぎ状態
 
-- Current state:
-- Changed files:
-- Checks run:
-- Checks not run and reason:
-- Next concrete action:
+- 現在の状態:
+- 変更したファイル:
+- 実行した検証:
+- 未実行の検証と理由:
+- 次の具体的な作業:

@@ -1,48 +1,49 @@
-# Contributing to L#frame
+# L#frame へのコントリビューション
 
-## Start here
+## 最初に読むもの
 
-Read the root [`AGENTS.md`](AGENTS.md), the closest scoped `AGENTS.md`, and the relevant
-architecture/ADR documents before changing code. Codex is the primary implementation path,
-but all committed instructions and validation must remain usable from Claude Code, Cursor,
-and ordinary shell workflows.
+コードを変更する前に、ルートの [`AGENTS.md`](AGENTS.md)、最も近いスコープ別 `AGENTS.md`、
+関連するアーキテクチャ文書と ADR を読みます。Codex を主要な実装経路としますが、コミットする
+指示と検証は Claude Code、Cursor、通常のシェルからも利用可能でなければなりません。
 
-## Canonical workflow
+AI が生成する計画、説明、レビュー、引き継ぎ、Issue／PR 文面、コミットメッセージは、
+ユーザーが別言語を明示しない限り日本語で記述します。
+
+## 正規ワークフロー
 
 ```bash
 make doctor
 make context
-# For cross-cutting or multi-session work:
+# 横断的または複数セッションにまたがる作業の場合:
 make new-task SLUG=short-kebab-case-name
 
-# Iterate with narrow checks, then:
+# 対象を絞った検証を行いながら実装し、最後に:
 make harness
 make ci
 ```
 
-Do not claim a command passed when it was not executed. Record unavailable checks and the
-exact environmental reason in the pull request or handoff.
+実行していないコマンドを成功したと記述してはいけません。利用できない検証と、実行できない
+環境上の正確な理由を PR または引き継ぎへ記録します。
 
-## Core boundary rule
+## 中核となる境界規則
 
-External crate types must not appear in `lsharp-frame-contract`, WIT, or the L# plugin API.
-Crate-specific conversions stay inside adapter crates, and concrete adapter selection stays
-inside application composition roots.
+外部 crate の型を `lsharp-frame-contract`、WIT、L# plugin API に含めてはいけません。
+crate 固有の変換は adapter crate 内部に閉じ込め、具体的な adapter の選択は application の
+composition root に限定します。
 
-## Change categories
+## 変更区分
 
-- **Contract change**: `lsharp-frame-contract` or `wit/`; requires compatibility, migration,
-  round-trip/conformance evidence, and coordinated Rust/L# documentation.
-- **Core change**: event routing, capability enforcement, resource lifecycle, or kernel
-  execution; requires deterministic observable-behavior tests.
-- **Adapter change**: crate/OS-specific implementation; baseline contracts remain unchanged
-  and the shared conformance suite must pass.
-- **Hot-path change**: boundary calls, PTY/terminal streams, large timelines, rendering, or
-  allocation; requires workload and measurement evidence.
-- **Plugin/kernel change**: L# behavior or SDK; host effects remain explicit and capability
-  checked.
+- **Contract 変更**: `lsharp-frame-contract` または `wit/`。互換性、移行、round-trip／conformance
+  の証跡と、Rust／L# ドキュメントの同時更新が必要です。
+- **Core 変更**: event routing、Capability 強制、resource lifecycle、Kernel 実行。決定的な
+  observable behavior test が必要です。
+- **Adapter 変更**: crate／OS 固有実装。baseline contract を変更せず、共通 conformance suite を
+ 通過させます。
+- **高負荷経路の変更**: 境界呼び出し、PTY／terminal stream、大規模 timeline、rendering、allocation。
+  workload と計測の証跡が必要です。
+- **Plugin／Kernel 変更**: L# の振る舞いまたは SDK。host effect を明示し、Capability 検査を通します。
 
-## Pull requests
+## Pull Request
 
-Use the repository pull-request template. Include objective, non-goals, affected boundaries,
-exact validation results, unexecuted checks, compatibility impact, and residual risk.
+リポジトリの PR template を使用します。目的、非目標、影響する境界、正確な検証結果、未実行の
+検証、互換性への影響、残存リスクを日本語で記載します。

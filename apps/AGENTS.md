@@ -1,12 +1,13 @@
-# Composition-root instructions
+# Composition root 向け指示
 
-These instructions extend the repository root `AGENTS.md` for `apps/**`.
+この指示は、`apps/**` に対してルート `AGENTS.md` を補足します。
 
-Application crates are composition roots. They may select concrete adapters and runtime
-implementations, but must not become a second location for domain rules.
+Application crate は composition root です。具体的な adapter と runtime 実装を選択できますが、
+ドメイン規則の第二の置き場所にしてはいけません。
 
-- Wire dependencies; do not duplicate core orchestration.
-- Keep startup, shutdown, and resource ownership explicit.
-- Translate configuration into L#frame-owned options before passing it inward.
-- Add an integration or smoke test for each new composition root.
-- Backend selection must remain replaceable without changing L# plugins or baseline WIT.
+- 依存関係を接続し、Core の orchestration を重複実装しません。
+- 起動、終了、resource ownership を明示します。
+- 設定値を内側へ渡す前に L#frame 所有の option へ変換します。
+- 新しい composition root ごとに integration test または smoke test を追加します。
+- Backend の選択は、L# plugin と baseline WIT を変更せず交換可能に保ちます。
+- AI の説明、レビュー、引き継ぎは原則として日本語で出力します。

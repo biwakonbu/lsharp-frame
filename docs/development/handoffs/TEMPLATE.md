@@ -1,19 +1,19 @@
-# Handoff: <task>
+# 引き継ぎ: <task>
 
-## Objective
+## 目的
 
-## Current state
+## 現在の状態
 
-## Changed files
+## 変更したファイル
 
-## Decisions
+## 判断事項
 
-## Checks run
+## 実行した検証
 
-## Checks not run
+## 未実行の検証
 
-## Known risks
+## 既知のリスク
 
-## Remaining work
+## 残作業
 
-## Next concrete action
+## 次の具体的な作業

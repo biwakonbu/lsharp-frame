@@ -1,170 +1,141 @@
-# L#frame agent instructions
+# L#frame エージェント向け指示
 
-This file is the canonical repository-wide instruction source for coding agents.
-Tool-specific files must stay thin and point back here instead of duplicating policy.
+このファイルは、コーディングエージェントが参照するリポジトリ全体の指示の正本です。
+ツール固有のファイルは薄いアダプターに留め、ここにある方針を重複して定義してはいけません。
 
-## Product intent
+## プロダクトの目的
 
-L#frame is a programmable native GUI environment for coding agents. Rust owns the native
-shell, high-throughput resources, and isolation boundaries. L# runs as the L#frame Kernel
-and plugin language on Wasmtime.
+L#frame は、コーディングエージェント向けのプログラマブルなネイティブ GUI 環境です。
+Rust はネイティブシェル、高スループットなリソース処理、隔離境界を担当し、L# は
+Wasmtime 上で L#frame Kernel とプラグイン言語として動作します。
 
-The product is not a text editor and is not a GUI wrapper around a TUI. Sessions, tool calls,
-approvals, artifacts, diffs, test results, PTY sessions, and workflows must be modeled as
-structured domain objects.
+このプロダクトはテキストエディタではなく、TUI を GUI で包むだけのツールでもありません。
+セッション、ツール呼び出し、承認、成果物、差分、テスト結果、PTY セッション、ワークフローを
+構造化されたドメインオブジェクトとして扱います。
 
-## Authority and required context
+## 出力言語
 
-1. Follow the current user/task instruction first.
-2. Follow this file and the closest scoped `AGENTS.md` for the area being changed.
-3. Treat ADRs and normative architecture documents as authoritative over examples.
-4. Treat generated files, tool-specific prompts, and comments as non-authoritative.
+- ユーザーが明示的に別の言語を指定しない限り、AI が生成する自然言語の出力は日本語にします。
+- この規則は、計画、進捗報告、説明、レビュー指摘、引き継ぎ、タスク記録、Issue／PR の本文と
+  コメント、コミットメッセージ、生成するドキュメントに適用します。
+- ソースコードの識別子、ファイル名、CLI コマンド、プロトコル名、外部 API の正式名称、原文を
+  保持すべき引用は翻訳しません。
+- コードコメントとリポジトリ内の説明文も、外部エコシステムの規約上英語が必要な場合を除き、
+  原則として日本語で記述します。
+- 対象ファイルや既存コードが英語であっても、それだけを理由にユーザー向け回答を英語へ
+  切り替えてはいけません。
 
-Before changing behavior, read:
+## 権威と必須コンテキスト
+
+1. 現在のユーザー指示またはタスク指示を最優先します。
+2. このファイルと、変更対象に最も近いスコープ別 `AGENTS.md` に従います。
+3. ADR と規範的なアーキテクチャ文書は、サンプルより優先します。
+4. 生成物、ツール固有プロンプト、コードコメントは正本として扱いません。
+
+振る舞いを変更する前に、次を読みます。
 
 - `README.md`
 - `docs/architecture.md`
 - `docs/backend-abstraction.md`
-- `docs/performance.md` when touching hot paths or high-volume data
-- the relevant ADR under `docs/adr/`
-- the nearest scoped `AGENTS.md`
+- 高負荷経路や大量データを変更する場合は `docs/performance.md`
+- `docs/adr/` 配下の関連 ADR
+- 最も近いスコープ別 `AGENTS.md`
 
-Codex is the primary implementation agent. Claude Code and Cursor are supported secondary
-agents. A change must not depend on one agent's private memory or proprietary configuration
-to remain understandable.
+Codex を主要な実装エージェントとし、Claude Code と Cursor を補助的に利用します。
+変更内容の理解に、特定エージェントの非公開メモリや専用設定を必要としてはいけません。
 
-## Working protocol
+## 作業手順
 
-1. Inspect the repository and existing implementation before proposing new code.
-2. Restate the objective, non-goals, acceptance criteria, and affected boundaries.
-3. For contract changes, cross-cutting work, or work likely to cross sessions, create a task
-   record from `docs/development/tasks/TEMPLATE.md`.
-4. Make the smallest coherent change that proves the intended behavior.
-5. Add or update tests before considering the implementation complete.
-6. Run the narrowest relevant check while iterating, then `make ci` before handoff.
-7. Review the final diff for architecture leakage, accidental scope growth, and missing evidence.
-8. Record unexecuted checks explicitly. Never imply a check passed if it was not run.
+1. 提案や変更の前に、リポジトリと既存実装を調査します。
+2. 目的、非目標、受入条件、影響する境界を明示します。
+3. 公開契約の変更、横断的変更、複数セッションにまたがる作業では、
+   `docs/development/tasks/TEMPLATE.md` からタスク記録を作成します。
+4. 意図した振る舞いを証明できる、最小で一貫した変更を実装します。
+5. 完了と判断する前に、テストを追加または更新します。
+6. 実装中は対象を絞った検証を行い、引き継ぎ前に `make ci` を実行します。
+7. 最終差分を確認し、アーキテクチャ境界の漏洩、意図しないスコープ拡大、証跡不足を除去します。
+8. 未実行の検証は明記します。実行していない検証を成功したように記述してはいけません。
 
-Do not rewrite unrelated code, silently change public contracts, or introduce a new
-production dependency without explaining why an existing abstraction is insufficient.
+無関係なコードの書き換え、公開契約の暗黙的変更、既存の抽象化で不十分な理由を説明しない
+本番依存関係の追加は禁止します。
 
-## Architecture invariants
+## アーキテクチャ不変条件
 
-- `lsharp-frame-contract` owns stable, crate-independent semantic types.
-- External GUI, renderer, async-runtime, PTY, process, and OS crate types must not escape
-  adapter crates.
-- `lsharp-frame-spi` defines native ports; concrete adapters implement them.
-- `lsharp-frame-core` orchestrates contracts and ports but does not depend on a GUI toolkit.
-- Composition roots under `apps/` select concrete adapters.
-- L# and Rust communicate through versioned WIT contracts and coarse-grained batches.
-- L# plugins never receive raw OS pointers, file descriptors, GPU objects, or Rust trait objects.
-- High-volume paths such as PTY output, terminal rendering, and large timelines stay native;
-  L# receives batched control or observation events.
-- Capability checks fail closed at the native boundary.
-- Baseline APIs remain portable. Backend-specific features live behind explicit, versioned
-  extension capabilities.
-- The UI thread must not wait synchronously for arbitrary plugin work.
-- HTML, CSS, and DOM are not the primary UI runtime. WebView is an optional surface.
+- `lsharp-frame-contract` は、crate に依存しない安定した意味モデルを所有します。
+- GUI、レンダラー、非同期ランタイム、PTY、プロセス、OS の外部 crate 型を adapter crate の
+  外へ漏らしてはいけません。
+- `lsharp-frame-spi` がネイティブ側の Port を定義し、具体的な adapter が実装します。
+- `lsharp-frame-core` は契約と Port を調停しますが、GUI toolkit を選択しません。
+- `apps/` 配下の composition root が具体的な adapter を選択します。
+- L# と Rust は、バージョン付き WIT 契約と粗粒度なバッチで通信します。
+- L# プラグインへ OS pointer、file descriptor、GPU object、Rust trait object を渡しません。
+- PTY 出力、terminal rendering、大規模 timeline などの高負荷経路はネイティブ側に保持し、
+  L# へはバッチ化した制御イベントまたは観測イベントを渡します。
+- Capability 検査はネイティブ境界で fail closed にします。
+- baseline API は移植可能に保ち、backend 固有機能は明示的なバージョン付き extension capability
+  として分離します。
+- UI thread は任意のプラグイン処理を同期的に待機してはいけません。
+- HTML、CSS、DOM を主要な UI runtime にしません。WebView は任意の surface として扱います。
 
-## Change classes and required evidence
+## 変更種別と必要な証跡
 
-### Contract or WIT change
+### Contract または WIT の変更
 
-- Describe compatibility impact and migration behavior.
-- Update Rust contract types, WIT, L# projections, and documentation together.
-- Add round-trip or conformance tests.
-- Add an ADR when changing an established architectural decision.
+- 互換性への影響と移行方法を記述します。
+- Rust contract 型、WIT、L# projection、ドキュメントを同じ変更で更新します。
+- round-trip test または conformance test を追加します。
+- 確立済みのアーキテクチャ判断を変更する場合は ADR を追加します。
 
-### Core change
+### Core の変更
 
-- Prove event ordering, capability enforcement, resource lifecycle, and failure behavior.
-- Prefer deterministic tests using headless or fake backends.
+- イベント順序、Capability 強制、リソースライフサイクル、失敗時の振る舞いを検証します。
+- headless backend または fake backend を使った決定的テストを優先します。
 
-### Adapter change
+### Adapter の変更
 
-- Keep external types private to the adapter.
-- Run the shared conformance suite or add one if none exists.
-- Document unsupported capabilities instead of emulating them incorrectly.
+- 外部型を adapter 内部に閉じ込めます。
+- 共通 conformance suite を実行し、存在しない場合は追加します。
+- 未対応 Capability を不正確に模倣せず、未対応として明示します。
 
-### Hot-path change
+### 高負荷経路の変更
 
-- Identify allocation, copy, boundary-call, and lock behavior.
-- Add or update a benchmark workload described in `docs/performance.md`.
-- Avoid dynamic dispatch and per-item cross-boundary calls inside inner loops.
+- allocation、copy、境界呼び出し、lock の挙動を明示します。
+- `docs/performance.md` に定義された benchmark workload を追加または更新します。
+- inner loop 内で dynamic dispatch や要素単位の境界呼び出しを行いません。
 
-### L# kernel or plugin change
+### L# Kernel またはプラグインの変更
 
-- Keep host effects explicit and capability-checked.
-- Preserve deterministic state transitions where possible.
-- If the L# compiler is unavailable, report that validation as not run.
+- host effect を明示し、Capability 検査を通します。
+- 可能な限り決定的な状態遷移を維持します。
+- L# compiler が利用できない場合は、compile／test を未実行として明記します。
 
-## Canonical commands
+## 正規コマンド
 
-Use the repository wrappers rather than inventing tool-specific command sequences.
+ツールごとに独自のコマンド列を作らず、リポジトリのラッパーを使用します。
 
 ```text
-make help          Show supported commands
-make doctor        Report local tool availability
-make context       Print a compact repository context snapshot
-make fmt           Format Rust sources
-make fmt-check     Verify formatting
-make check         Type-check all Rust targets
-make lint          Run Clippy with warnings denied
-make test          Run the Rust workspace tests
-make wit-check     Validate the WIT package when wasm-tools is available
-make harness       Validate agent configuration and repository invariants
-make ci            Run the full local validation gate
-make run-headless  Run the deterministic headless composition root
-make new-task SLUG=<slug>  Create a cross-session task record
+make help          利用可能なコマンドを表示
+make doctor        ローカルツールの利用可否を表示
+make context       機密情報を含まないリポジトリコンテキストを表示
+make fmt           Rust ソースを整形
+make fmt-check     Rust の整形状態を検証
+make check         Rust workspace 全体を型検査
+make lint          warning を拒否して Clippy を実行
+make test          Rust workspace のテストを実行
+make wit-check     wasm-tools がある場合に WIT package を検証
+make harness       エージェント設定とリポジトリ不変条件を検証
+make ci            ローカルの完全検証を実行
+make run-headless  決定的な headless composition root を実行
+make new-task SLUG=<slug>  複数セッション向けタスク記録を作成
 ```
 
-## Rust conventions
+## Rust の規約
 
-- The workspace forbids `unsafe` unless an ADR explicitly changes that policy.
-- Prefer domain-specific error enums over opaque strings at stable boundaries.
-- Keep public APIs small and deterministic; avoid exposing implementation ownership.
-- Use IDs or typed resource handles across boundaries, not crate-owned objects.
-- Tests belong near the behavior they prove; integration and conformance tests may use
-  dedicated modules when they span crates.
-- Do not loosen lint levels to land a change. Fix the issue or justify a narrow allow.
-
-## Documentation and decisions
-
-- `docs/architecture.md` describes current structure.
-- `docs/adr/` records durable architectural decisions.
-- `docs/development/` describes engineering workflow and evidence expectations.
-- Update documentation in the same change when observable behavior or a stable contract changes.
-- Do not use task records as a second architectural source of truth.
-
-## Git and handoff
-
-- Work on a focused branch such as `agent/<short-description>` unless the task says otherwise.
-- Do not commit, push, force-update, or merge unless the user explicitly requests it.
-- Keep commits reviewable and do not include unrelated working-tree changes.
-- A handoff must state: objective, changed files, decisions, checks run, checks not run, risks,
-  and the next concrete action.
-
-## Definition of done
-
-A change is complete only when:
-
-- acceptance criteria are satisfied by observable behavior;
-- relevant tests exist and pass;
-- `make harness` passes;
-- `make ci` passes, or unavailable steps are named with the exact reason;
-- architecture and capability boundaries remain intact;
-- docs and ADRs are updated where required;
-- the final diff contains no unrelated changes or stale scaffolding.
-
-## Code review rules
-
-Flag the following as blocking findings:
-
-- an external crate type leaks into `lsharp-frame-contract`, WIT, or the L# public API;
-- a new fine-grained L#↔Rust call is added to a hot path;
-- a capability can be bypassed or defaults open on failure;
-- UI or plugin work can block the native UI thread;
-- PTY or process output loses ordering, bytes, cancellation, or lifecycle events;
-- a baseline API silently depends on one GUI or OS backend;
-- tests assert implementation details while leaving observable behavior unproved;
-- a claimed validation step was not actually executed.
+- ADR で明示的に方針変更しない限り、workspace では `unsafe` を禁止します。
+- 安定境界では不透明な文字列よりドメイン固有の error enum を優先します。
+- 公開 API は小さく決定的に保ち、実装側の所有権を露出しません。
+- 境界では crate 所有オブジェクトではなく ID または型付き resource handle を使います。
+- テストは証明する振る舞いの近くに置きます。複数 crate にまたがる integration／conformance test は
+  専用 module に分離できます。
+- 変更を通すために lint level を緩めてはいけません。問題を修正するか、限定的な allow の理由を
+  明記します。

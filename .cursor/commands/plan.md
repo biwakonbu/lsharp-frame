@@ -1,4 +1,4 @@
-Read `AGENTS.md`, the closest scoped `AGENTS.md`, and relevant architecture/ADR files.
-Inspect the implementation. Produce an objective, non-goals, affected boundaries, acceptance
-criteria, ordered steps, validation commands, risks, and migration notes. Create a task
-record with `make new-task SLUG=<slug>` for cross-cutting or multi-session work.
+出力は日本語にする。`AGENTS.md`、最も近いスコープ別 `AGENTS.md`、関連するアーキテクチャ文書と
+ADR を読み、現在の実装を調査する。目的、非目標、影響する境界、受入条件、依存順の実装手順、
+検証コマンド、リスク、移行事項を含む計画を作成する。横断的または複数セッションにまたがる作業は
+`make new-task SLUG=<slug>` でタスク記録を作成する。

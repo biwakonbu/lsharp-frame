@@ -1,86 +1,90 @@
-# Development Harness
+# 開発ハーネス
 
 - Slug: `development-harness`
-- Created: `2026-07-29`
-- Status: complete
-- Owner/agent: Codex-compatible harness bootstrap
+- 作成日: `2026-07-29`
+- 状態: 完了
+- 担当者／エージェント: Codex 互換ハーネスの初期構築
 
-## Objective
+## 目的
 
-Provide a repository-owned development harness that lets Codex, Claude Code, Cursor, and
-ordinary shell users share one architecture policy, reusable workflow skills, one validation
-command surface, and an evidence-based handoff workflow. Codex is the primary implementation
-path.
+Codex、Claude Code、Cursor、通常のシェル利用者が、1つのアーキテクチャ方針、再利用可能な
+ワークフロー Skill、共通の検証コマンド、証跡ベースの引き継ぎ手順を共有できる、リポジトリ所有の
+開発ハーネスを提供します。Codex を主要な実装経路とします。
 
-## Non-goals
+また、ユーザーが別言語を明示しない限り、全エージェントの自然言語出力を日本語に統一します。
 
-- Implement the native GUI, Wasmtime runtime, PTY backend, or agent protocol.
-- Design the L# version manager or package distribution system.
-- Commit personal model choices, credentials, MCP endpoints, or machine-specific settings.
+## 非目標
 
-## Context and authority
+- ネイティブ GUI、Wasmtime runtime、PTY backend、agent protocol の実装。
+- L# version manager または package 配布システムの設計。
+- 個人のモデル選択、認証情報、MCP endpoint、マシン固有設定のコミット。
 
-- Relevant architecture documents: `docs/architecture.md`, `docs/backend-abstraction.md`,
+## コンテキストと正本
+
+- 関連するアーキテクチャ文書: `docs/architecture.md`、`docs/backend-abstraction.md`、
   `docs/performance.md`
-- Relevant ADRs: `docs/adr/0001-native-host-lsharp-kernel.md`,
-  `docs/adr/0002-stable-ui-ir.md`, `docs/adr/0003-capability-resource-boundary.md`
-- Existing implementation/tests: initial L#frame Rust/L#/WIT scaffold on `main`
+- 関連する ADR: `docs/adr/0001-native-host-lsharp-kernel.md`、
+  `docs/adr/0002-stable-ui-ir.md`、`docs/adr/0003-capability-resource-boundary.md`
+- 既存実装／テスト: `main` 上の初期 L#frame Rust／L#／WIT scaffold
 
-## Affected boundaries
+## 影響する境界
 
-- Rust contract/core/adapter: no product contract change; adds static architecture-leak checks.
-- WIT/L#: no public contract change; adds scoped agent instructions.
-- Capability/resource lifecycle: no runtime change.
-- Performance/hot path: no runtime change.
+- Rust contract／core／adapter: プロダクト contract は変更せず、アーキテクチャ漏洩の静的検査を追加。
+- WIT／L#: 公開 contract は変更せず、スコープ別エージェント指示を追加。
+- Capability／resource lifecycle: runtime 変更なし。
+- 性能／高負荷経路: runtime 変更なし。
 
-## Acceptance criteria
+## 受入条件
 
-- [x] `AGENTS.md` is the canonical policy with scoped area instructions.
-- [x] Claude Code and Cursor use thin adapters rather than duplicated architecture policy.
-- [x] Codex project defaults are committed without personal model/provider/auth settings.
-- [x] Codex and Claude Code expose mirrored Agent Skills for plan, implement, verify, review,
-      and handoff workflows, with drift detected by `make harness`.
-- [x] All tools share `make` targets for context, validation, tests, and handoff preparation.
-- [x] The harness validates configuration syntax, links, workspace membership, and stable
-      contract independence without requiring a Rust compiler.
-- [x] CI runs the harness before the pinned Rust workspace gate.
-- [x] PR, task, and handoff templates require exact evidence and unexecuted-check disclosure.
+- [x] `AGENTS.md` がスコープ別指示を伴う方針の正本である。
+- [x] Claude Code と Cursor が、重複したアーキテクチャ方針ではなく薄い adapter を使用する。
+- [x] 個人のモデル／provider／認証設定を含めずに Codex の project default をコミットしている。
+- [x] Codex と Claude Code が plan／implement／verify／review／handoff の同一 Skill を公開し、
+      drift を `make harness` で検出する。
+- [x] Cursor が同等の command を提供する。
+- [x] 全ツールが context、検証、テスト、引き継ぎ準備に同じ `make` target を使用する。
+- [x] Rust compiler がなくても、設定構文、link、workspace member、安定 contract の独立性を検証する。
+- [x] ユーザー指定の例外を除き、AI の自然言語出力を日本語とする規則を自己検証する。
+- [x] CI が固定 Rust workspace gate より先にハーネスを実行する。
+- [x] PR、タスク、引き継ぎ template が正確な証跡と未実行検証の開示を要求する。
 
-## Implementation plan
+## 実装計画
 
-1. Establish root and scoped canonical instruction files.
-2. Add thin Codex, Claude Code, and Cursor adapters and reusable skills/commands.
-3. Add Makefile wrappers and deterministic harness validation scripts.
-4. Add task/handoff/definition-of-done documentation and PR template.
-5. Pin the Rust toolchain and run harness checks locally and Rust checks in CI.
+1. ルートとスコープ別の正本指示ファイルを作成する。
+2. Codex、Claude Code、Cursor の薄い adapter と再利用可能な Skill／command を追加する。
+3. Makefile wrapper と決定的なハーネス検証 script を追加する。
+4. タスク、引き継ぎ、完了の定義、PR template を追加する。
+5. Rust toolchain を固定し、ハーネスと Rust の検証を CI で実行する。
+6. ハーネス全体を日本語化し、日本語出力規則を検証対象へ追加する。
 
-## Validation
+## 検証
 
 ```text
-make harness                                      PASS in assembled repository snapshot
-make doctor                                       PASS (diagnostic; reports missing tools)
+make harness                                      PASS
+make doctor                                       PASS（診断専用。不足ツールを表示）
 git diff --check                                  PASS
-GitHub Actions CI run 30418831200                  PASS before Agent Skills follow-up
-  Agent harness                                   PASS
+GitHub Actions CI run 30419029325                 PASS
+  エージェントハーネス                            PASS
   Rust workspace 1.97.1: fmt/check/clippy/test    PASS
   Rust MSRV 1.88.0: cargo check                   PASS
-wasm-tools component wit wit/frame.wit --json     NOT RUN: WIT was unchanged in this task
-L# compile/test                                    NOT RUN: lsharp unavailable
+wasm-tools component wit wit/frame.wit --json     未実行: このタスクでは WIT を変更していない
+L# compile/test                                    未実行: lsharp が利用できない
 ```
 
-## Decisions and risks
+## 判断事項とリスク
 
-- Decision: repository policy lives in `AGENTS.md`; tool-specific files stay thin.
-- Decision: repository workflows use Agent Skills for Codex/Claude and commands for Cursor.
-- Decision: `make` is the canonical command surface for agents and humans.
-- Decision: Rust is pinned to `1.97.1` until an explicit upgrade change is reviewed.
-- Risk: tool-specific skill, permission, and command schemas may evolve; adapters are kept
-  small and validated so changes do not affect product policy.
+- 判断: リポジトリ方針は `AGENTS.md` に置き、ツール固有ファイルは薄く保つ。
+- 判断: Codex／Claude は Agent Skill、Cursor は command を共通ワークフローに使用する。
+- 判断: AI の自然言語出力は、ユーザー指定の例外を除き日本語にする。
+- 判断: `make` をエージェントと人間の共通コマンド面にする。
+- 判断: 明示的な upgrade 変更がレビューされるまで Rust を `1.97.1` に固定する。
+- リスク: ツール固有の Skill、permission、command schema は変化し得る。adapter を小さく保ち、
+  検証することでプロダクト方針への影響を限定する。
 
-## Handoff state
+## 引き継ぎ状態
 
-- Current state: implementation, static validation, pinned Rust validation, and MSRV validation complete.
-- Changed files: agent configs/skills, Makefile/scripts, development docs/templates, CI/toolchain.
-- Checks run: repository harness, shell/JSON/TOML/link checks, Rust fmt/check/clippy/test, MSRV check.
-- Checks not run and reason: WIT unchanged; L# compiler unavailable in the execution environment.
-- Next concrete action: confirm current-head CI, then review and merge draft PR #1.
+- 現在の状態: 実装、静的検証、固定 Rust 検証、MSRV 検証、日本語化が完了。
+- 変更したファイル: エージェント設定／Skill、Makefile／script、開発文書／template、CI／toolchain。
+- 実行した検証: repository harness、shell／JSON／TOML／link、Rust fmt／check／clippy／test、MSRV check。
+- 未実行の検証と理由: WIT は未変更。実行環境に L# compiler がない。
+- 次の具体的な作業: 現在 HEAD の CI を確認し、PR #1 をレビューして merge する。

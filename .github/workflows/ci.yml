@@ -10,11 +10,11 @@ permissions:
 
 jobs:
   harness:
-    name: Agent harness
+    name: エージェントハーネス
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate repository harness
+      - name: リポジトリハーネスを検証
         run: make harness
 
   rust:
@@ -23,11 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install pinned Rust toolchain
+      - name: 固定 Rust toolchain をインストール
         run: rustup toolchain install 1.97.1 --profile minimal --component rustfmt,clippy
-      - name: Select pinned Rust toolchain
+      - name: 固定 Rust toolchain を選択
         run: rustup default 1.97.1
-      - name: Full validation gate
+      - name: 完全検証を実行
         run: make ci
 
   msrv:
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install declared minimum Rust toolchain
+      - name: 宣言済み最小 Rust toolchain をインストール
         run: rustup toolchain install 1.88.0 --profile minimal
-      - name: Check declared MSRV
+      - name: 宣言済み MSRV を検証
         run: cargo +1.88.0 check --workspace --all-targets

@@ -1,4 +1,4 @@
-# Handoffs
+# 引き継ぎ
 
-Use [TEMPLATE.md](TEMPLATE.md) for cross-agent or cross-session continuation. Handoffs are
-short-lived execution records; durable decisions belong in ADRs.
+別のエージェントまたはセッションへ作業を引き継ぐ場合は、[TEMPLATE.md](TEMPLATE.md) を使用します。
+引き継ぎは短期的な実行記録であり、長期的な判断は ADR に記録します。

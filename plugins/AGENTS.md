@@ -1,11 +1,12 @@
-# L# plugin instructions
+# L# Plugin 向け指示
 
-These instructions extend the repository root `AGENTS.md` for `plugins/**`.
+この指示は、`plugins/**` に対してルート `AGENTS.md` を補足します。
 
-- Declare required and optional capabilities explicitly.
-- Keep host interaction in typed effects.
-- Prefer named commands and inspectable extension points over hidden global mutation.
-- Provide deterministic fixtures for state transitions and UI transactions.
-- Avoid raw high-volume stream subscriptions unless the plugin actually needs the bytes.
-- A trusted capability such as arbitrary process execution must be documented as equivalent
-  to user-level arbitrary code execution.
+- 必須 Capability と任意 Capability を明示します。
+- host との連携を型付き Effect に限定します。
+- 隠れた global mutation より、名前付き command と検査可能な extension point を優先します。
+- 状態遷移と UI transaction に決定的な fixture を用意します。
+- plugin が実 byte を必要としない限り、高負荷な raw stream を購読しません。
+- 任意 process 実行などの trusted capability は、ユーザー権限での任意コード実行と同等であることを
+  ドキュメントへ明記します。
+- AI の説明、レビュー、引き継ぎは原則として日本語で出力します。

@@ -1,5 +1,5 @@
 ---
-description: L# kernel and plugin rules
+description: L# Kernel と Plugin の規則
 globs:
   - "kernel/**/*.ls"
   - "plugins/**/*.ls"
@@ -7,5 +7,5 @@ globs:
 alwaysApply: false
 ---
 
-Read @AGENTS.md. For kernel changes read @kernel/AGENTS.md; for plugin changes read
-@plugins/AGENTS.md. Keep host interaction effect-based and capability-checked.
+@AGENTS.md を読む。Kernel 変更では @kernel/AGENTS.md、Plugin 変更では @plugins/AGENTS.md を読む。
+host 連携を Effect として表し、Capability 検査を通す。説明、レビュー、引き継ぎは日本語で出力する。

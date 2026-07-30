@@ -1,37 +1,37 @@
-## Objective
+## 目的
 
-<!-- Observable outcome and why this change is needed. -->
+<!-- 観測可能な成果と、この変更が必要な理由。 -->
 
-## Non-goals
+## 非目標
 
-<!-- Explicitly excluded scope. -->
+<!-- 意図的に対象外とする範囲。 -->
 
-## Changes
+## 変更内容
 
-<!-- Contract/core/adapter/L#/WIT/docs changes. -->
+<!-- Contract／Core／Adapter／L#／WIT／ドキュメントの変更。 -->
 
-## Architecture and compatibility
+## アーキテクチャと互換性
 
-- [ ] No external implementation type leaks into stable contracts.
-- [ ] Capability and resource-lifecycle behavior is fail-closed and explicit.
-- [ ] WIT/public contract compatibility and migration are documented, if applicable.
-- [ ] Hot-path boundary/copy/allocation behavior is documented, if applicable.
+- [ ] 外部実装型が安定契約へ漏洩していない。
+- [ ] Capability と resource lifecycle の挙動が fail closed かつ明示的である。
+- [ ] WIT／公開契約を変更した場合、互換性と移行方法を記載した。
+- [ ] 高負荷経路を変更した場合、境界呼び出し、copy、allocation の挙動を記載した。
 
-## Evidence
+## 検証結果
 
 - [ ] `make harness`
 - [ ] `make fmt-check`
 - [ ] `make check`
 - [ ] `make lint`
 - [ ] `make test`
-- [ ] `make wit-check` when WIT changed
+- [ ] WIT を変更した場合は `make wit-check`
 
-Commands/results:
+実行コマンドと結果:
 
 ```text
 
 ```
 
-## Unexecuted checks and residual risk
+## 未実行の検証と残存リスク
 
-<!-- Name exact commands and reasons. Never mark an unexecuted check as passed. -->
+<!-- 未実行のコマンドと理由を正確に記載する。実行していない検証を成功扱いしない。 -->

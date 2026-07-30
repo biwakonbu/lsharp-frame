@@ -1,3 +1,4 @@
 @AGENTS.md
 
-The closest `AGENTS.md` extends the repository root policy and is authoritative for this area.
+最も近い `AGENTS.md` がルート方針を補足し、この領域の正本になります。
+ユーザーが別言語を指定しない限り、出力は日本語にしてください。

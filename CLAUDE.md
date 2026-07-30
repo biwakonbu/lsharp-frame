@@ -1,6 +1,7 @@
-# Claude Code instructions
+# Claude Code 向け指示
 
 @AGENTS.md
 
-`AGENTS.md` is the canonical policy. Do not add independent architecture or workflow rules
-here. Read the closest scoped `AGENTS.md` before editing a specialized area.
+`AGENTS.md` がリポジトリ方針の正本です。ここへ独立したアーキテクチャ規則や作業規則を
+追加してはいけません。専門領域を変更する前に、最も近いスコープ別 `AGENTS.md` を読み、
+ユーザーが別言語を指定しない限り出力は日本語にしてください。

@@ -1,5 +1,5 @@
-# Project-scoped Codex defaults. Model, provider, authentication, and telemetry remain
-# user-level concerns and must not be committed here.
+# プロジェクト単位の Codex 既定値。モデル、プロバイダー、認証、テレメトリーは
+# ユーザー単位の設定とし、このリポジトリにはコミットしない。
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 project_doc_max_bytes = 65536
